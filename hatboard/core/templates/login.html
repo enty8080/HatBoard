@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}HatBoard · Login{% endblock %}
+{% block links %}
+
+<link href="/static/css/styles.css" rel="stylesheet">
+
+{% endblock %}
+{% block body %}
+
+<body>
+<div class="container">
+    <div class="card card-login mx-auto mt-5">
+        <div align="center" class="card-header">
+            <p></p>
+            <img draggable="false" height="20%" src="/static/img/logo.png" style="margin-top:-20px;margin-bottom:-20px"
+                 width="20%">
+            <p></p><br>
+            <h3>HatBoard Login</h3>
+        </div>
+        <div class="card-body">
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <p></p>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <p></p>
+                <button class="btn btn-dark btn-block" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("id_username").classList.add("form-control");
+    document.getElementById("id_password").classList.add("form-control");
+    document.getElementById("id_username").placeholder = "Username";
+    document.getElementById("id_password").placeholder = "Password";
+    document.getElementById("id_username").type = "text";
+    document.getElementById("id_password").type = "password";
+    document.getElementById("id_username").required = "required";
+    document.getElementById("id_password").required = "required";
+    document.getElementById("id_username").autofocus = "autofocus";
+
+</script>
+
+</body>
+
+{% endblock %}
