@@ -53,8 +53,3 @@ Then you need to just type `hatboard` to make HatBoard to start its interface on
 ```
 hatboard
 ```
-
-
-## Special thanks
-
-* Thanks to [AnyChart JS](https://www.anychart.com), they provided powerful analytics tools like map and diagrams.
