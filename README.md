@@ -1,4 +1,4 @@
-# HatBoard
+# HatBoard (`coming soon`)
 
 <p>
     <a href="https://entysec.netlify.app">
