@@ -1,4 +1,4 @@
-# HatBoard (`coming soon`)
+# HatBoard
 
 <p>
     <a href="https://entysec.netlify.app">
@@ -14,11 +14,9 @@
 
 HatBoard is a HatSploit Framework web interface for executing attacks, handling and manipulating sessions and traffic.
 
-<img width="1440" alt="screen1" src="https://user-images.githubusercontent.com/54115104/129620228-da3bddf7-7d12-4b3b-a0b7-60a763eae939.png">
-
 ## Features
 
-* Handling and displaying sessions from HatSploit Framework.
+* Handling and displaying sessions via HatSploit Framework.
 * Optimized to send commands to sessions and recieve output.
 * Beautiful interface and powerful analytics tools like map or diagrams.
 
@@ -55,3 +53,8 @@ Then you need to just type `hatboard` to make HatBoard to start its interface on
 ```
 hatboard
 ```
+
+
+## Special thanks
+
+* Thanks to [AnyChart JS](https://www.anychart.com), they provided powerful analytics tools like map and diagrams.

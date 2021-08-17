@@ -1,0 +1,2 @@
+recursive-include hatboard/core/static *
+recursive-include hatboard/core/templates *
