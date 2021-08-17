@@ -16,7 +16,7 @@ HatBoard is a HatSploit Framework web interface for executing attacks, handling 
 
 ## Features
 
-* Handling and displaying sessions via HatSploit Framework.
+* Handling and displaying sessions from HatSploit Framework.
 * Optimized to send commands to sessions and recieve output.
 * Beautiful interface and powerful analytics tools like map or diagrams.
 
@@ -53,8 +53,3 @@ Then you need to just type `hatboard` to make HatBoard to start its interface on
 ```
 hatboard
 ```
-
-
-## Special thanks
-
-* Thanks to [AnyChart JS](https://www.anychart.com), they provided powerful analytics tools like map and diagrams.
