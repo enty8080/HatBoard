@@ -15501,11 +15501,11 @@ body {
   display: flex;
 }
 #layoutDrawer #layoutDrawer_nav {
-  flex-basis: 179px;
+  flex-basis: 200px;
   flex-shrink: 0;
   transition: transform 0.15s ease-in-out;
   z-index: 1038;
-  transform: translateX(-179px);
+  transform: translateX(-200px);
 }
 #layoutDrawer #layoutDrawer_content {
   position: relative;
@@ -15515,7 +15515,7 @@ body {
   min-width: 0;
   flex-grow: 1;
   min-height: calc(100vh - 4.5rem);
-  margin-left: -179px;
+  margin-left: -200px;
 }
 
 .drawer-toggled #layoutDrawer #layoutDrawer_nav {
@@ -15544,10 +15544,10 @@ body {
   }
 
   .drawer-toggled #layoutDrawer #layoutDrawer_nav {
-    transform: translateX(-179px);
+    transform: translateX(-200px);
   }
   .drawer-toggled #layoutDrawer #layoutDrawer_content {
-    margin-left: -179px;
+    margin-left: -200px;
   }
   .drawer-toggled #layoutDrawer #layoutDrawer_content:before {
     display: none;
@@ -15557,7 +15557,7 @@ body {
   z-index: 1039;
 }
 .nav-fixed #layoutDrawer #layoutDrawer_nav {
-  width: 179px;
+  width: 200px;
   height: 100vh;
   z-index: 1038;
 }
@@ -15568,7 +15568,7 @@ body {
   overflow-y: auto;
 }
 .nav-fixed #layoutDrawer #layoutDrawer_content {
-  padding-left: 179px;
+  padding-left: 200px;
   top: 4.5rem;
 }
 
