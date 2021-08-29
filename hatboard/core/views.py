@@ -114,9 +114,25 @@ def get_sessions(locate=False):
             else:
                 address, country = "Unknown", "Unknown"
 
+            platform = sessions[session_id]['platform']
+            if platform == 'macos':
+                platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; macOS'
+            elif platform == 'iphoneos':
+                platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; iPhoneOS'
+            elif platform == 'android':
+                platform = '<i class="fa fa-android"></i>&nbsp;&nbsp; Android'
+            elif platform == 'windows':
+                platform = '<i class="fa fa-windows"></i>&nbsp;&nbsp; Windows'
+            elif platform == 'linux':
+                platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Linux'
+            elif platform == 'unix':
+                platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Unix'
+            else:
+                platform = f'<i class="fa fa-question"></i>&nbsp;&nbsp; {platform}'
+
             Session.objects.create(
                 session_id=session_id,
-                platform=sessions[session_id]['platform'],
+                platform=platform,
                 type=sessions[session_id]['type'],
                 host=sessions[session_id]['host'],
                 port=sessions[session_id]['port'],
@@ -276,7 +292,11 @@ class Dashboard(LoginRequiredMixin, View):
         sessions = get_sessions(locate=True)
 
         for session in sessions:
-            platform = [session.platform, int(requests.get(f"{HATSPLOIT}/sessions?count={session.platform}").text)]
+            platform = session.platform[session.platform.find('; ')+2:]
+            platform = [platform, int(
+                requests.get(f"{HATSPLOIT}/sessions?count={platform.lower()}").text
+            )]
+
             if platform not in platforms:
                 platforms.append(platform)
 
