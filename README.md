@@ -56,3 +56,11 @@ Then you need to just type `hatboard` to make HatBoard to start its interface on
 ```
 hatboard
 ```
+
+## Synchronizing with HatSploit
+
+Start HatSploit Framework like this and it will automatically connect to HatBoard.
+
+```
+hsf --rest-api
+```
