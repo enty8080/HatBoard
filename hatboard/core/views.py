@@ -27,7 +27,7 @@
 from django.views import View
 from django.shortcuts import render
 
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,6 +36,8 @@ from .models import Session
 from geopy.geocoders import Nominatim
 
 import time
+import ipaddress
+import json
 import requests
 
 VERSION = '1.0.0'
@@ -66,12 +68,30 @@ def get_sessions(locate=False):
 
     for session_id in sessions.keys():
         if not Session.objects.filter(session_id=session_id).exists():
-            country = ""
-            address = ""
+            latitude, longitude = 0, 0
 
             if locate:
+                try:
+                    if ipaddress.ip_address(sessions[session_id]['host']).is_private:
+                        data = requests.get(
+                            "https://myexternalip.com/json"
+                        ).json()
+                        host = data['ip']
+                    else:
+                        host = sessions[session_id]['host']
+
+                    data = requests.get(
+                        f"http://ipinfo.io/{host}"
+                    ).json()['loc'].split(',')
+
+                    latitude = data[0]
+                    longitude = data[1]
+                except Exception:
+                    pass
+
+                address = ""
                 country = Nominatim(user_agent="nil").reverse(
-                    f'{sessions[session_id]["latitude"]},{sessions[session_id]["longitude"]}',
+                    f'{latitude},{longitude}',
                     language='en'
                 ).raw['address']
 
@@ -80,7 +100,19 @@ def get_sessions(locate=False):
                         address += country[field] + " "
 
                 address = address[:-1]
-                country = country['country']
+                if 'country' in country:
+                    country = country['country']
+                else:
+                    country = ''
+
+                if not country:
+                    country = "Unknown"
+
+                if not address:
+                    address = "Unknown"
+
+            else:
+                address, country = "Unknown", "Unknown"
 
             Session.objects.create(
                 session_id=session_id,
@@ -88,8 +120,8 @@ def get_sessions(locate=False):
                 type=sessions[session_id]['type'],
                 host=sessions[session_id]['host'],
                 port=sessions[session_id]['port'],
-                latitude=sessions[session_id]['latitude'],
-                longitude=sessions[session_id]['longitude'],
+                latitude=latitude,
+                longitude=longitude,
                 country=country,
                 address=address
             )
@@ -105,7 +137,7 @@ def get_sessions(locate=False):
 
 class Handler(LoginRequiredMixin, View):
     template = 'handler.html'
-    login_url = '/login'
+    login_url = '/login/'
 
     def get(self, request):
         return render(request, self.template, {
@@ -115,7 +147,7 @@ class Handler(LoginRequiredMixin, View):
 
 class Lookup(LoginRequiredMixin, View):
     template = 'lookup.html'
-    login_url = '/login'
+    login_url = '/login/'
 
     def get(self, request):
         locations = []
@@ -140,7 +172,7 @@ class Lookup(LoginRequiredMixin, View):
 
 class Map(LoginRequiredMixin, View):
     template = 'map.html'
-    login_url = '/login'
+    login_url = '/login/'
 
     def get(self, request):
         locations = []
@@ -164,7 +196,7 @@ class Map(LoginRequiredMixin, View):
 
 class Index(LoginRequiredMixin, View):
     template = 'index.html'
-    login_url = '/login'
+    login_url = '/login/'
 
     def get(self, request):
         return render(request, self.template, {
@@ -215,6 +247,22 @@ class Control(LoginRequiredMixin, View):
 class Dashboard(LoginRequiredMixin, View):
     template = 'dashboard.html'
     login_url = '/login/'
+
+    def post(self, request):
+        output = ""
+
+        if 'session' in request.POST and 'command' in request.POST:
+            session = request.POST['session']
+            command = request.POST['command']
+
+            output = requests.get(
+                f"{HATSPLOIT}/sessions?command={command}&output=yes&id={session}"
+            ).text
+
+            output = '<pre>' + output.replace('"', '') + '</pre>'
+            output = output.replace("\\n", '<br>')
+
+        return HttpResponse(json.dumps({'output': output}))
 
     def get(self, request):
         platforms = []

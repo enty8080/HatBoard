@@ -4,6 +4,7 @@
 {% block links %}
 
 <link href="/static/css/styles.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.29.1/css/jquery.terminal.css" rel="stylesheet"/>
 
 {% endblock %}
 {% block body %}
@@ -61,7 +62,7 @@
                     <ul aria-labelledby="dropdownMenuProfile" class="dropdown-menu dropdown-menu-end mt-3">
 
                         <li>
-                            <a class="dropdown-item" href="/login">
+                            <a class="dropdown-item" href="/login/">
                                 <i class="fa fa-sign-out"></i>
                                 <div class="me-3">Logout</div>
                             </a>
@@ -87,22 +88,22 @@
                     <div class="drawer-menu-divider"></div>
                     <div class="drawer-menu-heading">Sessions</div>
 
-                    <a class="nav-link" href="/dashboard">
+                    <a class="nav-link" href="/dashboard/">
                         <div class="nav-link-icon"><i class="fa fa-pie-chart"></i></div>
                         Dashboard
                     </a>
 
-                    <a class="nav-link" href="/map">
+                    <a class="nav-link" href="/map/">
                         <div class="nav-link-icon"><i class="fa fa-map"></i></div>
                         Map
                     </a>
 
-                    <a class="nav-link" href="/lookup">
+                    <a class="nav-link" href="/lookup/">
                         <div class="nav-link-icon"><i class="fa fa-binoculars"></i></div>
                         Lookup
                     </a>
 
-                    <a class="nav-link" href="/control">
+                    <a class="nav-link" href="/control/">
                         <div class="nav-link-icon"><i class="fa fa-terminal"></i></div>
                         Control
                     </a>
@@ -110,7 +111,7 @@
                     <div class="drawer-menu-divider"></div>
                     <div class="drawer-menu-heading">Manage</div>
 
-                    <a class="nav-link" href="/handler">
+                    <a class="nav-link" href="/handler/">
                         <div class="nav-link-icon"><i class="fa fa-cogs"></i></div>
                         Handler
                     </a>
@@ -264,6 +265,7 @@
                                 <th>Port</th>
                                 <th>Latitude</th>
                                 <th>Longitude</th>
+                                <th>Terminal</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -276,6 +278,11 @@
                                 <td>{{ session.port }}</td>
                                 <td>{{ session.latitude }}</td>
                                 <td>{{ session.longitude }}</td>
+                                <td>
+                                    <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#terminal" onclick="setSession({{ session.session_id }});">
+                                        <i class="fa fa-terminal"></i>
+                                    </button>
+                                </td>
                             </tr>
                             {% endfor %}
                             </tbody>
@@ -284,6 +291,26 @@
                 </div>
             </div>
         </main>
+
+        <div class="modal fade" id="terminal" tabindex="-1" aria-labelledby="terminal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="terminal_modal">Terminal Emulator</h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">Here you can execute commands on session.</div>
+
+                    <div class="d-flex h-100 w-100 align-items-center justify-content-center">
+                        <div id="hatboard_terminal" style="border: 3px solid white; border-radius: 10px;" class="terminal"></div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-text-primary me-2" type="button" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <footer class="py-4 mt-auto border-top" style="min-height: 74px">
             <div class="container-xl px-5">
@@ -300,6 +327,7 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 <script crossorigin="anonymous"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -312,7 +340,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/resize-observer-polyfill@1.5.1/dist/ResizeObserver.min.js"></script>
 
-<script src=https://unpkg.com/chartkick@4.0.5/dist/chartkick.js></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.terminal/2.29.1/js/jquery.terminal.js"></script>
+
+<script src="https://unpkg.com/chartkick@4.0.5/dist/chartkick.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.js"></script>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
@@ -323,6 +353,28 @@
 
 <script>
     new Chartkick.PieChart("thepie", {{ platforms | safe }}, {donut: true, download: {background: "#fff"}});
+</script>
+
+<script>
+    function setSession(session) {
+        self.session = session;
+    }
+
+	jQuery(function($, undefined) {
+        $('#hatboard_terminal').terminal(function(command) {
+            var terminal = this;
+		    $.post("/dashboard/", {csrfmiddlewaretoken: "{{ csrf_token | safe }}", session: self.session, command: command}, function(response) {
+		        let data = JSON.parse(response);
+				terminal.echo(data.output, {'raw': true});
+		    });
+		}, {
+		    greetings: '',
+		    name: 'terminal',
+		    width: 700,
+		    height: 250,
+		    prompt: '',
+		});
+	});
 </script>
 
 </body>
