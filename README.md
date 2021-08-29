@@ -16,11 +16,13 @@ HatBoard is a HatSploit Framework web interface for executing attacks, handling 
 
 <img width="1440" alt="129620228-da3bddf7-7d12-4b3b-a0b7-60a763eae939" src="https://user-images.githubusercontent.com/54115104/129756400-afc45088-d434-4db8-996f-21fcccddda00.png">
 
-## Features
+## Benefits
 
-* Handling and displaying sessions from HatSploit Framework.
-* Optimized to send commands to sessions and recieve output.
-* Beautiful interface and powerful analytics tools like map or diagrams.
+1. **Modern & User-friendly Interface**: HatBoard has modern, beautiful and user-friendly interface, so it is very easy to navigate.
+2. **Synchronization with HatSploit Framework**: you can handle and manipulate sessions through HatBoard in real time.
+3. **Pop-Up Terminal Emulator**: interact with sessions through HatBoard via user-friendly pop-up terminal emulator.
+4. **Command & Control**: send commands directly to session and retrieve output and also close session if you need to.
+5. **Sessions Lookup**: retrieve session location, country, city and etc. using only its IP address.
 
 ## Installation
 
