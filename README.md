@@ -14,6 +14,8 @@
 
 HatBoard is a HatSploit Framework web interface for executing attacks, handling and manipulating sessions and traffic.
 
+![preview](https://user-images.githubusercontent.com/54115104/131259249-684220c1-e26c-416a-8dfa-99e85e4f16b2.png)
+
 ## Benefits
 
 1. **Modern & User-friendly Interface**: HatBoard has modern, beautiful and user-friendly interface, so it is very easy to navigate.
