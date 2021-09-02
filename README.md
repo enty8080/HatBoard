@@ -49,15 +49,16 @@ pip3 install git+https://github.com/EntySec/HatBoard
 To use HatBoard just type `hatboard -h` in your terminal.
 
 ```
-usage: hatboard [-h] [--create-user] [--address ADDRESS]
+usage: hatboard [-h] [-r] [-a ADDRESS]
 
 HatBoard is a HatSploit Framework web interface for executing attacks,
 handling and manipulating sessions and traffic.
 
 optional arguments:
-  -h, --help         show this help message and exit
-  --create-user      Create new user for HatBoard.
-  --address ADDRESS  Run HatBoard on custom address.
+  -h, --help            show this help message and exit
+  -r, --register        Register new user for HatBoard.
+  -a ADDRESS, --address ADDRESS
+                        Run HatBoard on custom address.
 ```
 
 First, you need to registrate a user to log in to the HatBoard web interface.
