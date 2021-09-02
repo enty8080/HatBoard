@@ -66,11 +66,13 @@ First, you need to create a user to log in to the HatBoard web interface.
 hatboard --create-user
 ```
 
-Then you need to just type `hatboard` to make HatBoard start its interface on port `8000`.
+Then you need to just type `hatboard` to start control panel.
 
 ```
 hatboard
 ```
+
+After this, navigate to `http://127.0.0.1:7777/` and log in to your account.
 
 ## Synchronizing with HatSploit
 
