@@ -56,7 +56,7 @@ handling and manipulating sessions and traffic.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -r, --register        Register new user for HatBoard.
+  -r, --register        Register a new user for HatBoard.
   -a ADDRESS, --address ADDRESS
                         Run HatBoard on custom address.
 ```
