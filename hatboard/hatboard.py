@@ -42,14 +42,14 @@ def main():
 
     description = "HatBoard is a HatSploit Framework web interface for executing attacks, handling and manipulating sessions and traffic."
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('--create-user', dest='create_user', action='store_true', help='Create new user for HatBoard.')
-    parser.add_argument('--address', dest='address', help='Run HatBoard on custom address.')
+    parser.add_argument('-r', '--register', dest='register', action='store_true', help='Register new user for HatBoard.')
+    parser.add_argument('-a', '--address', dest='address', help='Run HatBoard on custom address.')
     args = parser.parse_args()
 
     application = get_wsgi_application()
     call_command('migrate')
 
-    if args.create_user:
+    if args.register:
         call_command('createsuperuser')
         sys.exit(0)
     elif args.address:
