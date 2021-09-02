@@ -42,7 +42,7 @@ def main():
 
     description = "HatBoard is a HatSploit Framework web interface for executing attacks, handling and manipulating sessions and traffic."
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument('-r', '--register', dest='register', action='store_true', help='Register new user for HatBoard.')
+    parser.add_argument('-r', '--register', dest='register', action='store_true', help='Register a new user for HatBoard.')
     parser.add_argument('-a', '--address', dest='address', help='Run HatBoard on custom address.')
     args = parser.parse_args()
 
