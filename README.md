@@ -60,10 +60,10 @@ optional arguments:
   --address ADDRESS  Run HatBoard on custom address.
 ```
 
-First, you need to create a user to log in to the HatBoard web interface.
+First, you need to registrate a user to log in to the HatBoard web interface.
 
 ```
-hatboard --create-user
+hatboard -r
 ```
 
 Then you need to just type `hatboard` to start control panel.
