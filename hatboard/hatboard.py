@@ -56,4 +56,4 @@ def main():
         call_command('runserver', args.address)
         sys.exit(0)
 
-    call_command('runserver')
+    call_command('runserver', '0.0.0.0:7777')
