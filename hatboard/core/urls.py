@@ -35,6 +35,6 @@ urlpatterns = [
     path('map/', views.Map.as_view(), name='map'),
     path('lookup/', views.Lookup.as_view(), name='lookup'),
     path('control/', views.Control.as_view(), name='control'),
-    path('handler/', views.Handler.as_view(), name='handler'),
+    path('attack/', views.Attack.as_view(), name='attack'),
     path('login/', views.Login.as_view(), name='login'),
 ]
