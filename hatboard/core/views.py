@@ -181,8 +181,7 @@ class Attack(LoginRequiredMixin, View):
     def get(self, request):
         return render(request, self.template, {
             'connected': check_connected(),
-            'sessions': get_sessions(),
-            'output': ""
+            'sessions': get_sessions()
         })
 
 
