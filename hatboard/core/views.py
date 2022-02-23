@@ -151,13 +151,38 @@ def get_sessions(locate=False):
     return sessions
 
 
-class Handler(LoginRequiredMixin, View):
-    template = 'handler.html'
+class Attack(LoginRequiredMixin, View):
+    template = 'attack.html'
     login_url = '/login/'
+
+    def post(self, request):
+        if 'session' in request.POST:
+            session = request.POST['session']
+
+            if session:
+                if 'local_file' not in request.POST:
+                    remote_file = request.POST['remote_file']
+                    local_path = request.POST['local_path']
+
+                    if remote_file and local_path:
+                        requests.get(f"{HATSPLOIT}/sessions?download={remote_file}&path={local_path}&id={session}")
+                else:
+                    local_file = request.POST['local_file']
+                    remote_path = request.POST['remote_path']
+
+                    if local_file and remote_path:
+                        request.get(f"{HATSPLOIT}/sessions?upload={local_file}&path={remote_path}&id={session}")
+
+        return render(request, self.template, {
+            'connected': check_connected(),
+            'sessions': get_sessions()
+        })
 
     def get(self, request):
         return render(request, self.template, {
             'connected': check_connected(),
+            'sessions': get_sessions(),
+            'output': ""
         })
 
 
