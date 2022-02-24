@@ -40,115 +40,115 @@ import ipaddress
 import json
 import requests
 
-VERSION = '1.0.0'
-START = time.time()
-CLOSED = 0
-HATSPLOIT = 'http://127.0.0.1:8008'
 
+class Utils:
+    api = 'http://127.0.0.1:8008'
+    closed = 0
+    version = '1.0.0'
+    start = time.time()
 
-def get_uptime():
-    return time.time() - START
+    def get_uptime(self):
+        return time.time() - self.start
 
+    def check_connected(self):
+        try:
+            requests.get(self.api)
+        except Exception:
+            return False
+        return True
 
-def check_connected():
-    try:
-        requests.get(HATSPLOIT)
-    except Exception:
-        return False
-    return True
+    def get_sessions(self, locate=False):
+        try:
+            sessions = requests.get(f"{self.api}/sessions?list=all").json()
+        except Exception:
+            sessions = dict()
 
+        for session_id in sessions.keys():
+            if not Session.objects.filter(session_id=session_id).exists():
+                latitude, longitude = 0, 0
 
-def get_sessions(locate=False):
-    global CLOSED
+                if locate:
+                    try:
+                        if ipaddress.ip_address(sessions[session_id]['host']).is_private:
+                            data = requests.get(
+                                "https://myexternalip.com/json"
+                            ).json()
+                            host = data['ip']
+                        else:
+                            host = sessions[session_id]['host']
 
-    try:
-        sessions = requests.get(f"{HATSPLOIT}/sessions?list=all").json()
-    except Exception:
-        sessions = dict()
-
-    for session_id in sessions.keys():
-        if not Session.objects.filter(session_id=session_id).exists():
-            latitude, longitude = 0, 0
-
-            if locate:
-                try:
-                    if ipaddress.ip_address(sessions[session_id]['host']).is_private:
                         data = requests.get(
-                            "https://myexternalip.com/json"
-                        ).json()
-                        host = data['ip']
+                            f"http://ipinfo.io/{host}"
+                        ).json()['loc'].split(',')
+
+                        latitude = data[0]
+                        longitude = data[1]
+                    except Exception:
+                        pass
+
+                    address = ""
+                    country = Nominatim(user_agent="nil").reverse(
+                        f'{latitude},{longitude}',
+                        language='en'
+                    ).raw['address']
+
+                    for field in country:
+                        if field != 'country':
+                            address += country[field] + " "
+
+                    address = address[:-1]
+                    if 'country' in country:
+                        country = country['country']
                     else:
-                        host = sessions[session_id]['host']
+                        country = ''
 
-                    data = requests.get(
-                        f"http://ipinfo.io/{host}"
-                    ).json()['loc'].split(',')
+                    if not country:
+                        country = "Unknown"
 
-                    latitude = data[0]
-                    longitude = data[1]
-                except Exception:
-                    pass
+                    if not address:
+                        address = "Unknown"
 
-                address = ""
-                country = Nominatim(user_agent="nil").reverse(
-                    f'{latitude},{longitude}',
-                    language='en'
-                ).raw['address']
-
-                for field in country:
-                    if field != 'country':
-                        address += country[field] + " "
-
-                address = address[:-1]
-                if 'country' in country:
-                    country = country['country']
                 else:
-                    country = ''
+                    address, country = "Unknown", "Unknown"
 
-                if not country:
-                    country = "Unknown"
+                platform = sessions[session_id]['platform']
+                if platform == 'macos':
+                    platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; macOS'
+                elif platform == 'iphoneos':
+                    platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; iPhoneOS'
+                elif platform == 'android':
+                    platform = '<i class="fa fa-android"></i>&nbsp;&nbsp; Android'
+                elif platform == 'windows':
+                    platform = '<i class="fa fa-windows"></i>&nbsp;&nbsp; Windows'
+                elif platform == 'linux':
+                    platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Linux'
+                elif platform == 'unix':
+                    platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Unix'
+                else:
+                    platform = f'<i class="fa fa-question"></i>&nbsp;&nbsp; {platform}'
 
-                if not address:
-                    address = "Unknown"
+                Session.objects.create(
+                    session_id=session_id,
+                    platform=platform,
+                    type=sessions[session_id]['type'],
+                    host=sessions[session_id]['host'],
+                    port=sessions[session_id]['port'],
+                    latitude=latitude,
+                    longitude=longitude,
+                    country=country,
+                    address=address
+                )
 
-            else:
-                address, country = "Unknown", "Unknown"
+        for session in Session.objects.all():
+            if str(session.session_id) not in sessions.keys():
+                self.closed += 1
+                Session.objects.filter(session_id=session.session_id).delete()
 
-            platform = sessions[session_id]['platform']
-            if platform == 'macos':
-                platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; macOS'
-            elif platform == 'iphoneos':
-                platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; iPhoneOS'
-            elif platform == 'android':
-                platform = '<i class="fa fa-android"></i>&nbsp;&nbsp; Android'
-            elif platform == 'windows':
-                platform = '<i class="fa fa-windows"></i>&nbsp;&nbsp; Windows'
-            elif platform == 'linux':
-                platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Linux'
-            elif platform == 'unix':
-                platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Unix'
-            else:
-                platform = f'<i class="fa fa-question"></i>&nbsp;&nbsp; {platform}'
+        sessions = Session.objects.all()
+        return sessions
 
-            Session.objects.create(
-                session_id=session_id,
-                platform=platform,
-                type=sessions[session_id]['type'],
-                host=sessions[session_id]['host'],
-                port=sessions[session_id]['port'],
-                latitude=latitude,
-                longitude=longitude,
-                country=country,
-                address=address
-            )
 
-    for session in Session.objects.all():
-        if str(session.session_id) not in sessions.keys():
-            CLOSED += 1
-            Session.objects.filter(session_id=session.session_id).delete()
-
-    sessions = Session.objects.all()
-    return sessions
+utils = Utils()
 
 
 class Attack(LoginRequiredMixin, View):
@@ -165,23 +165,23 @@ class Attack(LoginRequiredMixin, View):
                     local_path = request.POST['local_path']
 
                     if remote_file and local_path:
-                        requests.get(f"{HATSPLOIT}/sessions?download={remote_file}&path={local_path}&id={session}")
+                        requests.get(f"{utils.api}/sessions?download={remote_file}&path={local_path}&id={session}")
                 else:
                     local_file = request.POST['local_file']
                     remote_path = request.POST['remote_path']
 
                     if local_file and remote_path:
-                        request.get(f"{HATSPLOIT}/sessions?upload={local_file}&path={remote_path}&id={session}")
+                        request.get(f"{utils.api}/sessions?upload={local_file}&path={remote_path}&id={session}")
 
         return render(request, self.template, {
-            'connected': check_connected(),
-            'sessions': get_sessions()
+            'connected': utils.check_connected(),
+            'sessions': utils.get_sessions()
         })
 
     def get(self, request):
         return render(request, self.template, {
-            'connected': check_connected(),
-            'sessions': get_sessions()
+            'connected': utils.check_connected(),
+            'sessions': utils.get_sessions()
         })
 
 
@@ -191,7 +191,7 @@ class Lookup(LoginRequiredMixin, View):
 
     def get(self, request):
         locations = []
-        sessions = get_sessions(locate=True)
+        sessions = utils.get_sessions(locate=True)
 
         for session in sessions:
             location = [session.country, 0]
@@ -206,7 +206,7 @@ class Lookup(LoginRequiredMixin, View):
         return render(request, self.template, {
             'locations': locations,
             'sessions': sessions,
-            'connected': check_connected(),
+            'connected': utils.check_connected(),
         })
 
 
@@ -216,7 +216,7 @@ class Map(LoginRequiredMixin, View):
 
     def get(self, request):
         locations = []
-        sessions = get_sessions(locate=True)
+        sessions = utils.get_sessions(locate=True)
 
         for session in sessions:
             location = [session.country, 0]
@@ -230,7 +230,7 @@ class Map(LoginRequiredMixin, View):
 
         return render(request, self.template, {
             'locations': locations,
-            'connected': check_connected(),
+            'connected': utils.check_connected(),
         })
 
 
@@ -240,9 +240,9 @@ class Index(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, self.template, {
-            'connected': check_connected(),
-            'uptime': get_uptime(),
-            'version': VERSION
+            'connected': utils.check_connected(),
+            'uptime': utils.get_uptime(),
+            'version': utils.version
         })
 
 
@@ -258,28 +258,28 @@ class Control(LoginRequiredMixin, View):
 
             if session:
                 if 'command' not in request.POST:
-                    requests.get(f"{HATSPLOIT}/sessions?close={session}")
+                    requests.get(f"{utils.api}/sessions?close={session}")
                 else:
                     command = request.POST['command']
 
                     if command:
                         output = requests.get(
-                            f"{HATSPLOIT}/sessions?command={command}&output=yes&id={session}"
+                            f"{utils.api}/sessions?command={command}&output=yes&id={session}"
                         ).text
 
                         output = '<pre>' + output.replace('"', '') + '</pre>'
                         output = output.replace('\\n', '<br>')
 
         return render(request, self.template, {
-            'connected': check_connected(),
-            'sessions': get_sessions(),
+            'connected': utils.check_connected(),
+            'sessions': utils.get_sessions(),
             'output': output
         })
 
     def get(self, request):
         return render(request, self.template, {
-            'connected': check_connected(),
-            'sessions': get_sessions(),
+            'connected': utils.check_connected(),
+            'sessions': utils.get_sessions(),
             'output': ""
         })
 
@@ -296,7 +296,7 @@ class Dashboard(LoginRequiredMixin, View):
             command = request.POST['command']
 
             output = requests.get(
-                f"{HATSPLOIT}/sessions?command={command}&output=yes&id={session}"
+                f"{utils.api}/sessions?command={command}&output=yes&id={session}"
             ).text
 
             output = '<pre>' + output.replace('"', '') + '</pre>'
@@ -309,16 +309,16 @@ class Dashboard(LoginRequiredMixin, View):
         locations = []
 
         try:
-            opened_sessions = int(requests.get(f"{HATSPLOIT}/sessions?count=all").text)
+            opened_sessions = int(requests.get(f"{utils.api}/sessions?count=all").text)
         except Exception:
             opened_sessions = 0
 
-        sessions = get_sessions(locate=True)
+        sessions = utils.get_sessions(locate=True)
 
         for session in sessions:
             platform = session.platform[session.platform.find('; ')+2:]
             platform = [platform, int(
-                requests.get(f"{HATSPLOIT}/sessions?count={platform.lower()}").text
+                requests.get(f"{utils.api}/sessions?count={platform.lower()}").text
             )]
 
             if platform not in platforms:
@@ -334,12 +334,12 @@ class Dashboard(LoginRequiredMixin, View):
                     locations[i][1] += 1
 
         return render(request, self.template, {
-            'connected': check_connected(),
+            'connected': utils.check_connected(),
             'sessions': sessions,
             'platforms': platforms,
 
             'opened_sessions': opened_sessions,
-            'closed_sessions': CLOSED,
+            'closed_sessions': utils.closed,
 
             'top_platforms': len(platforms),
             'top_locations': len(locations),
@@ -349,7 +349,7 @@ class Dashboard(LoginRequiredMixin, View):
 
 class Login(View):
     template = 'login.html'
-    
+
     def get(self, request):
         form = AuthenticationForm()
         return render(request, self.template, {'form': form})
