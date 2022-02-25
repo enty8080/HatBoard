@@ -35,8 +35,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .api import API
 from .utils import Utils
 
+api = API()
 utils = Utils()
 
 
@@ -54,13 +56,21 @@ class Attack(LoginRequiredMixin, View):
                     local_path = request.POST['local_path']
 
                     if remote_file and local_path:
-                        requests.get(f"{utils.api}/sessions?download={remote_file}&path={local_path}&id={session}")
+                        api.request('sessions', {
+                            'download': remote_file,
+                            'path': local_path,
+                            'id': session
+                        })
                 else:
                     local_file = request.POST['local_file']
                     remote_path = request.POST['remote_path']
 
                     if local_file and remote_path:
-                        request.get(f"{utils.api}/sessions?upload={local_file}&path={remote_path}&id={session}")
+                        api.request('sessions', {
+                            'upload': local_file,
+                            'path': remote_path,
+                            'id': session
+                        })
 
         return render(request, self.template, {
             'connected': utils.check_connected(),
@@ -147,14 +157,16 @@ class Control(LoginRequiredMixin, View):
 
             if session:
                 if 'command' not in request.POST:
-                    requests.get(f"{utils.api}/sessions?close={session}")
+                    api.request('sessions', {'close': session})
                 else:
                     command = request.POST['command']
 
                     if command:
-                        output = requests.get(
-                            f"{utils.api}/sessions?command={command}&output=yes&id={session}"
-                        ).text
+                        output = api.request('sessions', {
+                            'command': command,
+                            'output': 'yes',
+                            'id': session
+                        }).text
 
                         output = '<pre>' + output.replace('"', '') + '</pre>'
                         output = output.replace('\\n', '<br>')
@@ -184,9 +196,11 @@ class Dashboard(LoginRequiredMixin, View):
             session = request.POST['session']
             command = request.POST['command']
 
-            output = requests.get(
-                f"{utils.api}/sessions?command={command}&output=yes&id={session}"
-            ).text
+            output = api.request('sessions', {
+                'command': command,
+                'output': 'yes',
+                'id': session
+            }).text
 
             output = '<pre>' + output.replace('"', '') + '</pre>'
             output = output.replace("\\n", '<br>')
@@ -197,18 +211,16 @@ class Dashboard(LoginRequiredMixin, View):
         platforms = []
         locations = []
 
-        try:
-            opened_sessions = int(requests.get(f"{utils.api}/sessions?count=all").text)
-        except Exception:
+        if utils.check_connected():
+            opened_sessions = int(api.request('sessions', {'count': 'all'}).text)
+        else:
             opened_sessions = 0
 
         sessions = utils.get_sessions(locate=True)
 
         for session in sessions:
             platform = session.platform[session.platform.find('; ')+2:]
-            platform = [platform, int(
-                requests.get(f"{utils.api}/sessions?count={platform.lower()}").text
-            )]
+            platform = [platform, int(api.request('sessions', {'count': platform.lower()}).text)]
 
             if platform not in platforms:
                 platforms.append(platform)
