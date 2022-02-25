@@ -24,6 +24,9 @@
 # SOFTWARE.
 #
 
+import json
+import requests
+
 from django.views import View
 from django.shortcuts import render
 
@@ -32,121 +35,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Session
-from geopy.geocoders import Nominatim
-
-import time
-import ipaddress
-import json
-import requests
-
-
-class Utils:
-    api = 'http://127.0.0.1:8008'
-    closed = 0
-    version = '1.0.0'
-    start = time.time()
-
-    def get_uptime(self):
-        return time.time() - self.start
-
-    def check_connected(self):
-        try:
-            requests.get(self.api)
-        except Exception:
-            return False
-        return True
-
-    def get_sessions(self, locate=False):
-        try:
-            sessions = requests.get(f"{self.api}/sessions?list=all").json()
-        except Exception:
-            sessions = dict()
-
-        for session_id in sessions.keys():
-            if not Session.objects.filter(session_id=session_id).exists():
-                latitude, longitude = 0, 0
-
-                if locate:
-                    try:
-                        if ipaddress.ip_address(sessions[session_id]['host']).is_private:
-                            data = requests.get(
-                                "https://myexternalip.com/json"
-                            ).json()
-                            host = data['ip']
-                        else:
-                            host = sessions[session_id]['host']
-
-                        data = requests.get(
-                            f"http://ipinfo.io/{host}"
-                        ).json()['loc'].split(',')
-
-                        latitude = data[0]
-                        longitude = data[1]
-                    except Exception:
-                        pass
-
-                    address = ""
-                    country = Nominatim(user_agent="nil").reverse(
-                        f'{latitude},{longitude}',
-                        language='en'
-                    ).raw['address']
-
-                    for field in country:
-                        if field != 'country':
-                            address += country[field] + " "
-
-                    address = address[:-1]
-                    if 'country' in country:
-                        country = country['country']
-                    else:
-                        country = ''
-
-                    if not country:
-                        country = "Unknown"
-
-                    if not address:
-                        address = "Unknown"
-
-                else:
-                    address, country = "Unknown", "Unknown"
-
-                platform = sessions[session_id]['platform']
-                if platform == 'macos':
-                    platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; macOS'
-                elif platform == 'iphoneos':
-                    platform = '<i class="fa fa-apple"></i>&nbsp;&nbsp; iPhoneOS'
-                elif platform == 'android':
-                    platform = '<i class="fa fa-android"></i>&nbsp;&nbsp; Android'
-                elif platform == 'windows':
-                    platform = '<i class="fa fa-windows"></i>&nbsp;&nbsp; Windows'
-                elif platform == 'linux':
-                    platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Linux'
-                elif platform == 'unix':
-                    platform = '<i class="fa fa-linux"></i>&nbsp;&nbsp; Unix'
-                else:
-                    platform = f'<i class="fa fa-question"></i>&nbsp;&nbsp; {platform}'
-
-                Session.objects.create(
-                    session_id=session_id,
-                    platform=platform,
-                    type=sessions[session_id]['type'],
-                    host=sessions[session_id]['host'],
-                    port=sessions[session_id]['port'],
-                    latitude=latitude,
-                    longitude=longitude,
-                    country=country,
-                    address=address
-                )
-
-        for session in Session.objects.all():
-            if str(session.session_id) not in sessions.keys():
-                self.closed += 1
-                Session.objects.filter(session_id=session.session_id).delete()
-
-        sessions = Session.objects.all()
-        return sessions
-
+from .utils import Utils
 
 utils = Utils()
 
