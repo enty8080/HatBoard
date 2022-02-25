@@ -28,15 +28,14 @@ import time
 import ipaddress
 import requests
 
+from .api import API
 from .models import Session
+
 from geopy.geocoders import Nominatim
 
 
 class Utils:
-    hatsploit_host = '127.0.0.1'
-    hatsploit_port = 8008
-
-    api = f'http://{hatsploit_host}:{str(hatsploit_port)}'
+    api = API()
 
     closed = 0
     version = '1.0.0'
@@ -46,19 +45,16 @@ class Utils:
         return time.time() - self.start
 
     def check_connected(self):
-        try:
-            requests.get(self.api)
-        except Exception:
-            return False
-        return True
+        if api.request():
+            return True
+        return False
 
     def get_sessions(self, locate=False):
-        try:
-            sessions = requests.get(f"{self.api}/sessions?list=all").json()
-        except Exception:
+        sessions = api.request('sessions', {'list': 'all'}).json()
+        if not sessions:
             sessions = dict()
 
-        for session_id in sessions.keys():
+        for session_id in sessions:
             if not Session.objects.filter(session_id=session_id).exists():
                 latitude, longitude = 0, 0
 
