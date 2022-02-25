@@ -45,14 +45,17 @@ class Utils:
         return time.time() - self.start
 
     def check_connected(self):
-        if api.request():
+        if self.api.request():
             return True
         return False
 
     def get_sessions(self, locate=False):
-        sessions = api.request('sessions', {'list': 'all'}).json()
+        sessions = self.api.request('sessions', {'list': 'all'})
+
         if not sessions:
             sessions = dict()
+        else:
+            sessions = sessions.json()
 
         for session_id in sessions:
             if not Session.objects.filter(session_id=session_id).exists():
