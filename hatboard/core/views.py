@@ -352,7 +352,10 @@ class Login(View):
 
     def get(self, request):
         form = AuthenticationForm()
-        return render(request, self.template, {'form': form})
+        return render(request, self.template, {
+            'connected': utils.check_connected(),
+            'form': form
+        })
 
     def post(self, request):
         form = AuthenticationForm(request.POST)
