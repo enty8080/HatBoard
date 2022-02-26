@@ -42,8 +42,8 @@ api = API()
 utils = Utils()
 
 
-class Attack(LoginRequiredMixin, View):
-    template = 'attack.html'
+class Exchange(LoginRequiredMixin, View):
+    template = 'exchange.html'
     login_url = '/login/'
 
     def post(self, request):
