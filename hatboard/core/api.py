@@ -24,17 +24,30 @@
 # SOFTWARE.
 #
 
-from django.contrib import admin
-from django.urls import path
-from hatboard.core import views
+import requests
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.Index.as_view(), name='index'),
-    path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
-    path('map/', views.Map.as_view(), name='map'),
-    path('lookup/', views.Lookup.as_view(), name='lookup'),
-    path('control/', views.Control.as_view(), name='control'),
-    path('attack/', views.Attack.as_view(), name='attack'),
-    path('login/', views.Login.as_view(), name='login'),
-]
+
+class API:
+    hatsploit_host = '127.0.0.1'
+    hatsploit_port = str(8008)
+
+    api = f"http://{hatsploit_host}:{hatsploit_port}/"
+
+    def request(self, action=None, data={}):
+        if data:
+            request = ''
+            for key in data:
+                request += f'{key}={data[key]}&'
+            if action:
+                request = self.api + action + '?' + request[:-1]
+            else:
+                request = self.api + '?' + request[:-1]
+        else:
+            if action:
+                request = self.api + action
+            else:
+                request = self.api
+        try:
+            return requests.get(request)
+        except Exception:
+            return None
