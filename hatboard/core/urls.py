@@ -30,11 +30,15 @@ from hatboard.core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('login/', views.Login.as_view(), name='login'),
     path('', views.Index.as_view(), name='index'),
+
+    path('modules/', views.Modules.as_view(), name='modules'),
+
     path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
     path('map/', views.Map.as_view(), name='map'),
     path('lookup/', views.Lookup.as_view(), name='lookup'),
     path('control/', views.Control.as_view(), name='control'),
-    path('attack/', views.Attack.as_view(), name='attack'),
-    path('login/', views.Login.as_view(), name='login'),
+    path('exchange/', views.Exchange.as_view(), name='exchange')
 ]
