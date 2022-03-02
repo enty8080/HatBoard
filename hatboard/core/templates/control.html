@@ -5,92 +5,91 @@
 
 <body class="nav-fixed bg-light">
 <main>
-        <div class="row gx-5">
-            <div class="col-lg-8 mb-5">
-                <div class="card card-raised h-100">
-                    <div class="card-header bg-transparent px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="me-4">
-                                <h2 class="card-title mb-0">Send Command</h2>
-                                <div class="card-subtitle">Send Command to Session</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div>
-                            <div class="form-floating">
-                                <form action="/control/" method="post">
-                                    {% csrf_token %}
-                                    <select class="form-select" name="session">
-                                        {% for session in sessions %}
-                                        <option value="{{ session.session_id }}">Session #{{ session.session_id }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <p></p>
-                                    <div class="input-group">
-                                        <input class="form-control" type="text" name="command" placeholder="command">
-                                        <button class="btn btn-dark" type="submit">
-                                            <i class="fa fa-rocket"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+    <div class="row gx-5">
+        <div class="col-lg-8 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Send Command</h2>
+                            <div class="card-subtitle">Send Command to Session</div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-4 mb-5">
-                <div class="card card-raised h-100">
-                    <div class="card-header bg-transparent px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="me-4">
-                                <h2 class="card-title mb-0">Close Session</h2>
-                                <div class="card-subtitle">Close Session</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div>
-                            <div class="form-floating">
-                                <form action="/control/" method="post">
-                                    {% csrf_token %}
-                                    <select class="form-select" name="session">
-                                        {% for session in sessions %}
-                                        <option value="{{ session.session_id }}">Session #{{ session.session_id }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <p></p>
-                                    <button class="btn btn-dark btn-block" type="submit">Close</button>
-                                </form>
-                            </div>
+                <div class="card-body p-4">
+                    <div>
+                        <div class="form-floating">
+                            <form action="/control/" method="post">
+                                {% csrf_token %}
+                                <select class="form-select" name="session">
+                                    {% for session in sessions %}
+                                    <option value="{{ session.session_id }}">Session #{{ session.session_id }}</option>
+                                    {% endfor %}
+                                </select>
+                                <p></p>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" name="command" placeholder="command">
+                                    <button class="btn btn-dark" type="submit">
+                                        <i class="fa fa-rocket"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card card-raised">
-            <div class="card-header bg-transparent px-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="me-4">
-                        <h2 class="card-title mb-0">Command Output</h2>
-                        <div class="card-subtitle">Command Results</div>
+        <div class="col-lg-4 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Close Session</h2>
+                            <div class="card-subtitle">Close Session</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div>
+                        <div class="form-floating">
+                            <form action="/control/" method="post">
+                                {% csrf_token %}
+                                <select class="form-select" name="session">
+                                    {% for session in sessions %}
+                                    <option value="{{ session.session_id }}">Session #{{ session.session_id }}</option>
+                                    {% endfor %}
+                                </select>
+                                <p></p>
+                                <button class="btn btn-dark btn-block" type="submit">Close</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body p-4">
-                <output id="command_output">
-                    {% if not output %}
-                    No command output available
-                    {% else %}
-                    {% autoescape off %}{{ output }}{% endautoescape %}
-                    {% endif %}
-                </output>
+        </div>
+    </div>
+
+    <div class="card card-raised">
+        <div class="card-header bg-transparent px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title mb-0">Command Output</h2>
+                    <div class="card-subtitle">Command Results</div>
+                </div>
             </div>
         </div>
+        <div class="card-body p-4">
+            <output id="command_output">
+                {% if not output %}
+                No command output available
+                {% else %}
+                {% autoescape off %}{{ output }}{% endautoescape %}
+                {% endif %}
+            </output>
+        </div>
+    </div>
 </main>
 </body>
 
 {% endblock %}
-

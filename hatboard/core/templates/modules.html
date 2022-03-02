@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}HatBoard · Modules{% endblock %}
+{% block body %}
+
+<body class="nav-fixed bg-light">
+<main>
+    <div class="row gx-5">
+        <div class="col-lg-8 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Set Options</h2>
+                            <div class="card-subtitle">Set Module Options</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div>
+                        <div class="form-floating">
+                            <form action="/modules/" method="post">
+                                {% csrf_token %}
+                                {% if not options %}
+                                <p>No module in use.</p>
+                                {% else %}
+                                {% for option in options %}
+                                <mwc-tab-bar class="nav nav-tabs" role="tablist">
+                                    <mwc-tab id="{{ option.name }}" label="{{ option.name }}" data-bs-toggle="tab" data-bs-target="#{{ option.name }}" role="tab" aria-controls="{{ option.name }}" aria-selected="false"></mwc-tab>
+                                </mwc-tab-bar>
+
+                                <div class="tab-content border border-top-0 p-3" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="{{ option.name }}" role="tabpanel" aria-labelledby="{{ option.name }}">
+                                        <p>{{ option.description }}</p>
+                                        <p></p>
+                                        <input class="form-control" type="text" name="{{ option.name }}" placeholder="{{ option.value }}">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <p></p>
+                                <button class="btn btn-dark" type="submit">
+                                    <i class="fa fa-rocket"></i>
+                                </button>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Use Module</h2>
+                            <div class="card-subtitle">Use Module</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div>
+                        <div class="form-floating">
+                            <form action="/modules/" method="post">
+                                {% csrf_token %}
+                                <select class="form-select" name="module">
+                                    {% for module in modules %}
+                                    <option value="{{ module.module }}">{{ module.module }}</option>
+                                    {% endfor %}
+                                </select>
+                                <p></p>
+                                <button class="btn btn-dark btn-block" type="submit">Use</button>
+                                <p></p>
+                                <button class="btn btn-dark btn-block" type="submit">Run</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-raised">
+        <div class="card-header bg-transparent px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title mb-0">Modules</h2>
+                    <div class="card-subtitle">Modules Available</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <table id="datatablesSimple">
+                <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Module</th>
+                    <th>Rank</th>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for module in modules %}
+                <tr>
+                    <td>{{ module.number }}</td>
+                    <td>{{ module.module }}</td>
+                    <td>{{ module.rank }}</td>
+                    <td>{{ module.name }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script src="/static/js/datatable.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+
+</body>
+
+{% endblock %}
+

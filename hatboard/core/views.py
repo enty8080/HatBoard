@@ -38,8 +38,67 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .api import API
 from .utils import Utils
 
+from .models import Option
+
 api = API()
 utils = Utils()
+
+
+class Modules(LoginRequiredMixin, View):
+    template = 'modules.html'
+    login_url = '/login/'
+
+    def post(self, request):
+        options = {}
+
+        if 'module' in request.POST:
+            module = request.POST['module']
+
+            if module:
+                api.request('modules', {
+                    'use': module
+                })
+
+                options = api.request('modules', {
+                    'options': module
+                })
+
+                if not options:
+                    options = dict()
+                else:
+                    options = options.json()
+
+                for option in options:
+                    if not Module.objects.filter(name=option).exists():
+                        Option.objects.create(
+                            name=option,
+                            value=options[option]['Value'],
+                            required=options[option]['Required'],
+                            description=options[option]['Description']
+                        )
+                    else:
+                        Module.objects.filter(name=option).delete()
+                        Option.objects.create(
+                            name=option,
+                            value=options[option]['Value'],
+                            required=options[option]['Required'],
+                            description=options[option]['Description']
+                        )
+
+                options = Option.objects.all()
+
+        return render(request, self.template, {
+            'connected': utils.check_connected(),
+            'modules': utils.get_modules(),
+            'options': options
+        })
+
+    def get(self, request):
+        return render(request, self.template, {
+            'connected': utils.check_connected(),
+            'modules': utils.get_modules(),
+            'options': {}
+        })
 
 
 class Exchange(LoginRequiredMixin, View):
@@ -182,6 +241,57 @@ class Control(LoginRequiredMixin, View):
             'connected': utils.check_connected(),
             'sessions': utils.get_sessions(),
             'output': ""
+        })
+
+
+class Overview(LoginRequiredMixin, View):
+    template = 'overview.html'
+    login_url = '/login/'
+
+    def get(self, request):
+        modules = utils.get_modules()
+
+        categories = []
+        platforms = []
+
+        for module in modules:
+            category = module.module.split('/')[0]
+            amount = 0
+
+            for current_module in modules:
+                if current_module.module.split('/')[0] == category:
+                    amount += 1
+
+            category = [category.title(), amount]
+
+            if category not in categories:
+                categories.append(category)
+
+            platform = module.platform
+            amount = 0
+
+            for current_module in modules:
+                if current_module.platform == platform:
+                    amount += 1
+
+            if platform in ['apple_ios']:
+                platform = 'Apple iOS'
+            elif platform in ['macos']:
+                platform = 'macOS'
+            else:
+                platform = platform.title()
+
+            platform = [platform, amount]
+
+            if platform not in platforms:
+                platforms.append(platform)
+
+        return render(request, self.template, {
+            'connected': utils.check_connected(),
+            'modules': modules,
+
+            'categories': categories,
+            'platforms': platforms
         })
 
 

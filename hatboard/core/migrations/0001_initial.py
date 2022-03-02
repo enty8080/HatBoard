@@ -46,6 +46,25 @@ class Migration(migrations.Migration):
                 ('longitude', models.CharField(max_length=250)),
                 ('country', models.CharField(max_length=250)),
                 ('address', models.CharField(max_length=250))
-            ],
+            ]
         ),
+        migrations.CreateModel(
+            name='Module',
+            fields=[
+                ('number', models.PositiveIntegerField()),
+                ('module', models.CharField(max_length=250)),
+                ('rank', models.CharField(max_length=250)),
+                ('name', models.CharField(max_length=250)),
+                ('platform', models.CharField(max_length=250))
+            ]
+        ),
+        migrations.CreateModel(
+            name='Option',
+            fields=[
+                ('name', models.CharField(max_length=250)),
+                ('value', models.CharField(max_length=250)),
+                ('required', models.CharField(max_length=250)),
+                ('description', models.CharField(max_length=250))
+            ]
+        )
     ]

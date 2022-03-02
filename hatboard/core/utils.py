@@ -29,6 +29,8 @@ import ipaddress
 import requests
 
 from .api import API
+
+from .models import Module
 from .models import Session
 
 from geopy.geocoders import Nominatim
@@ -48,6 +50,27 @@ class Utils:
         if self.api.request():
             return True
         return False
+
+    def get_modules(self):
+        modules = self.api.request('modules', {'list': 'all'})
+
+        if not modules:
+            modules = dict()
+        else:
+            modules = modules.json()
+
+        for number in modules:
+            if not Module.objects.filter(number=number).exists():
+                Module.objects.create(
+                    number=number,
+                    module=modules[number]['Module'],
+                    rank=modules[number]['Rank'],
+                    name=modules[number]['Name'],
+                    platform=modules[number]['Platform']
+                )
+
+        modules = Module.objects.all()
+        return modules
 
     def get_sessions(self, locate=False):
         sessions = self.api.request('sessions', {'list': 'all'})

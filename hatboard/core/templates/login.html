@@ -5,31 +5,31 @@
 
 <body class="nav-fixed bg-light">
 <main>
-        <div class="card card-login mx-auto mt-5">
-            <div align="center" class="card-header">
-                <p></p>
-                <img draggable="false" height="20%" src="/static/img/logo.png" style="margin-top:-20px;margin-bottom:-20px" width="20%">
-                <p></p>
-            </div>
-            <div class="card-body">
-                <form action="/login/" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <div class="form-label-group">
-                            {{ form.username }}
-                        </div>
-                    </div>
-                    <p></p>
-                    <div class="form-group">
-                        <div class="form-label-group">
-                            {{ form.password }}
-                        </div>
-                    </div>
-                    <p></p>
-                    <button class="btn btn-dark btn-block" type="submit">Login</button>
-                </form>
-            </div>
+    <div class="card card-login mx-auto mt-5">
+        <div align="center" class="card-header">
+            <p></p>
+            <img draggable="false" height="20%" src="/static/img/logo.png" style="margin-top:-20px;margin-bottom:-20px" width="20%">
+            <p></p>
         </div>
+        <div class="card-body">
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <p></p>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <p></p>
+                <button class="btn btn-dark btn-block" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
 </main>
 
 <script>

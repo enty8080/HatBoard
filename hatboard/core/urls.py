@@ -34,6 +34,7 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('', views.Index.as_view(), name='index'),
 
+    path('overview/', views.Overview.as_view(), name='overview'),
     path('modules/', views.Modules.as_view(), name='modules'),
 
     path('dashboard/', views.Dashboard.as_view(), name='dashboard'),

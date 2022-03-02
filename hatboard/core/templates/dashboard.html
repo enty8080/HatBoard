@@ -5,159 +5,159 @@
 
 <body class="nav-fixed bg-light">
 <main>
-        <div class="row gx-5">
-            <div class="col-xxl-3 col-md-6 mb-5">
-                <div class="card card-raised border-start border-success border-4">
-                    <div class="card-body px-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="me-2">
-                                <div class="display-5">{{ opened_sessions }}</div>
-                                <div class="card-text">Opened Sessions</div>
-                            </div>
-                            <div class="icon-circle bg-success text-white"><i class="fa fa-user"></i>
-                            </div>
+    <div class="row gx-5">
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised border-start border-success border-4">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5">{{ opened_sessions }}</div>
+                            <div class="card-text">Opened Sessions</div>
+                        </div>
+                        <div class="icon-circle bg-success text-white"><i class="fa fa-user"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-md-6 mb-5">
-                <div class="card card-raised border-start border-info border-4">
-                    <div class="card-body px-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="me-2">
-                                <div class="display-5">{{ top_platforms }}</div>
-                                <div class="card-text">Top Platforms</div>
-                            </div>
-                            <div class="icon-circle bg-info text-white"><i class="fa fa-laptop"></i>
-                            </div>
+        </div>
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised border-start border-info border-4">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5">{{ top_platforms }}</div>
+                            <div class="card-text">Top Platforms</div>
+                        </div>
+                        <div class="icon-circle bg-info text-white"><i class="fa fa-laptop"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-md-6 mb-5">
-                <div class="card card-raised border-start border-info border-4">
-                    <div class="card-body px-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="me-2">
-                                <div class="display-5">{{ top_locations }}</div>
-                                <div class="card-text">Top Locations</div>
-                            </div>
-                            <div class="icon-circle bg-info text-white"><i class="fa fa-globe"></i>
-                            </div>
+        </div>
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised border-start border-info border-4">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5">{{ top_locations }}</div>
+                            <div class="card-text">Top Locations</div>
+                        </div>
+                        <div class="icon-circle bg-info text-white"><i class="fa fa-globe"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-md-6 mb-5">
-                <div class="card card-raised border-start border-danger border-4">
-                    <div class="card-body px-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div class="me-2">
-                                <div class="display-5">{{ closed_sessions }}</div>
-                                <div class="card-text">Closed Sessions</div>
-                            </div>
-                            <div class="icon-circle bg-danger text-white"><i
-                                    class="fa fa-user-times"></i></div>
+        </div>
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised border-start border-danger border-4">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5">{{ closed_sessions }}</div>
+                            <div class="card-text">Closed Sessions</div>
+                        </div>
+                        <div class="icon-circle bg-danger text-white"><i
+                                class="fa fa-user-times"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row gx-5">
+        <div class="col-lg-8 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Map Vizualization</h2>
+                            <div class="card-subtitle">Sessions Locations</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex h-100 w-100 align-items-center justify-content-center">
+                        <div class="w-100">
+                            {% if locations %}
+                            <div id="themap" style="height: 300px;"></div>
+                            {% else %}
+                            <p>No data available to display</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row gx-5">
-            <div class="col-lg-8 mb-5">
-                <div class="card card-raised h-100">
-                    <div class="card-header bg-transparent px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="me-4">
-                                <h2 class="card-title mb-0">Map Vizualization</h2>
-                                <div class="card-subtitle">Sessions Locations</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="d-flex h-100 w-100 align-items-center justify-content-center">
-                            <div class="w-100">
-                                {% if locations %}
-                                <div id="themap" style="height: 300px;"></div>
-                                {% else %}
-                                <p>No data available to display</p>
-                                {% endif %}
-                            </div>
+        <div class="col-lg-4 mb-5">
+            <div class="card card-raised h-100">
+                <div class="card-header bg-transparent px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="me-4">
+                            <h2 class="card-title mb-0">Platfoms</h2>
+                            <div class="card-subtitle">Sessions Platforms</div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-lg-4 mb-5">
-                <div class="card card-raised h-100">
-                    <div class="card-header bg-transparent px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="me-4">
-                                <h2 class="card-title mb-0">Platfoms</h2>
-                                <div class="card-subtitle">Sessions Platforms</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <div class="d-flex h-100 w-100 align-items-center justify-content-center">
-                            <div class="w-100">
-                                {% if platforms %}
-                                <div id="thepie"></div>
-                                {% else %}
-                                <p>No data available to display</p>
-                                {% endif %}
-                            </div>
+                <div class="card-body p-4">
+                    <div class="d-flex h-100 w-100 align-items-center justify-content-center">
+                        <div class="w-100">
+                            {% if platforms %}
+                            <div id="thepie"></div>
+                            {% else %}
+                            <p>No data available to display</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="card card-raised">
-            <div class="card-header bg-transparent px-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="me-4">
-                        <h2 class="card-title mb-0">Sessions</h2>
-                        <div class="card-subtitle">Sessions Details</div>
-                    </div>
+    <div class="card card-raised">
+        <div class="card-header bg-transparent px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title mb-0">Sessions</h2>
+                    <div class="card-subtitle">Sessions Details</div>
                 </div>
             </div>
-            <div class="card-body p-4">
-                <table id="datatablesSimple">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Platform</th>
-                        <th>Type</th>
-                        <th>Host</th>
-                        <th>Port</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                        <th>Terminal</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for session in sessions %}
-                    <tr>
-                        <td>{{ session.session_id }}</td>
-                        <td>{{ session.platform | safe }}</td>
-                        <td>{{ session.type }}</td>
-                        <td>{{ session.host }}</td>
-                        <td>{{ session.port }}</td>
-                        <td>{{ session.latitude }}</td>
-                        <td>{{ session.longitude }}</td>
-                        <td>
-                            <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#terminal" onclick="setSession({{ session.session_id }});">
-                                <i class="fa fa-terminal"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
         </div>
+        <div class="card-body p-4">
+            <table id="datatablesSimple">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Platform</th>
+                    <th>Type</th>
+                    <th>Host</th>
+                    <th>Port</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Terminal</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for session in sessions %}
+                <tr>
+                    <td>{{ session.session_id }}</td>
+                    <td>{{ session.platform | safe }}</td>
+                    <td>{{ session.type }}</td>
+                    <td>{{ session.host }}</td>
+                    <td>{{ session.port }}</td>
+                    <td>{{ session.latitude }}</td>
+                    <td>{{ session.longitude }}</td>
+                    <td>
+                        <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#terminal" onclick="setSession({{ session.session_id }});">
+                            <i class="fa fa-terminal"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </main>
 
 <div class="modal fade" id="terminal" tabindex="-1" aria-labelledby="terminal" aria-hidden="true">

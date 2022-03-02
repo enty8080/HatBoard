@@ -5,42 +5,42 @@
 
 <body class="nav-fixed bg-light">
 <main>
-        <div class="card card-raised">
-            <div class="card-header bg-transparent px-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="me-4">
-                        <h2 class="card-title mb-0">HatBoard Status</h2>
-                        <div class="card-subtitle">HatBoard Information</div>
-                    </div>
-                </div>
-            </div>
-            <div align="center" class="card-header">
-                <p></p>
-                <img draggable="false" height="20%" src="/static/img/logo.png" style="margin-top:-20px;margin-bottom:-20px" width="20%">
-                <p></p>
-            </div>
-            <div class="card-body p-4">
-                <div class="card card-raised mdc-ripple-upgraded">
-                    <div class="card-body">
-                        <h2 class="card-title">Status</h2>
-                        <h3 class="card-subtitle mb-3">Connection Status</h3>
-                        {% if connected %}
-                        <span class="badge bg-success">connected</span>
-                        {% else %}
-                        <span class="badge bg-warning">not connected</span>
-                        {% endif %}
-                    </div>
-                </div>
-                <p></p>
-                <div class="card card-raised mdc-ripple-upgraded">
-                    <div class="card-body">
-                        <h2 class="card-title">Uptime</h2>
-                        <h3 class="card-subtitle mb-3">HatBoard Uptime</h3>
-                        <div class="text-dark">{{ uptime }}</div>
-                    </div>
+    <div class="card card-raised">
+        <div class="card-header bg-transparent px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title mb-0">HatBoard Status</h2>
+                    <div class="card-subtitle">HatBoard Information</div>
                 </div>
             </div>
         </div>
+        <div align="center" class="card-header">
+            <p></p>
+            <img draggable="false" height="20%" src="/static/img/logo.png" style="margin-top:-20px;margin-bottom:-20px" width="20%">
+            <p></p>
+        </div>
+        <div class="card-body p-4">
+            <div class="card card-raised mdc-ripple-upgraded">
+                <div class="card-body">
+                    <h2 class="card-title">Status</h2>
+                    <h3 class="card-subtitle mb-3">Connection Status</h3>
+                    {% if connected %}
+                    <span class="badge bg-success">connected</span>
+                    {% else %}
+                    <span class="badge bg-warning">not connected</span>
+                    {% endif %}
+                </div>
+            </div>
+            <p></p>
+            <div class="card card-raised mdc-ripple-upgraded">
+                <div class="card-body">
+                    <h2 class="card-title">Uptime</h2>
+                    <h3 class="card-subtitle mb-3">HatBoard Uptime</h3>
+                    <div class="text-dark">{{ uptime }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 

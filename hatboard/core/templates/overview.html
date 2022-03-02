@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 
-{% block title %}HatBoard · Lookup{% endblock %}
+{% block title %}HatBoard · Overview{% endblock %}
 {% block body %}
 
 <body class="nav-fixed bg-light">
 <main>
     <div class="row gx-5">
-        <div class="col-lg-8 mb-5">
+        <div class="col-lg-6 mb-5">
             <div class="card card-raised h-100">
                 <div class="card-header bg-transparent px-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="me-4">
-                            <h2 class="card-title mb-0">Countries</h2>
-                            <div class="card-subtitle">Sessions Countries</div>
+                            <h2 class="card-title mb-0">Categories</h2>
+                            <div class="card-subtitle">Modules Categories</div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex h-100 w-100 align-items-center justify-content-center">
                         <div class="w-100">
-                            {% if locations %}
-                            <div id="thecolumn" style="height: 300px;"></div>
+                            {% if categories %}
+                            <div id="thepie"></div>
                             {% else %}
                             <p>No data available to display</p>
                             {% endif %}
@@ -30,21 +30,21 @@
             </div>
         </div>
 
-        <div class="col-lg-4 mb-5">
+        <div class="col-lg-6 mb-5">
             <div class="card card-raised h-100">
                 <div class="card-header bg-transparent px-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="me-4">
-                            <h2 class="card-title mb-0">Countries</h2>
-                            <div class="card-subtitle">Sessions Countries</div>
+                            <h2 class="card-title mb-0">Platfoms</h2>
+                            <div class="card-subtitle">Modules Platforms</div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex h-100 w-100 align-items-center justify-content-center">
                         <div class="w-100">
-                            {% if locations %}
-                            <div id="thepie"></div>
+                            {% if platforms %}
+                            <div id="thepie2"></div>
                             {% else %}
                             <p>No data available to display</p>
                             {% endif %}
@@ -59,8 +59,8 @@
         <div class="card-header bg-transparent px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="me-4">
-                    <h2 class="card-title mb-0">Sessions Lookup</h2>
-                    <div class="card-subtitle">Sessions Locations</div>
+                    <h2 class="card-title mb-0">Modules</h2>
+                    <div class="card-subtitle">Available Modules</div>
                 </div>
             </div>
         </div>
@@ -68,21 +68,19 @@
             <table id="datatablesSimple">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>Country</th>
-                    <th>Address</th>
+                    <th>Number</th>
+                    <th>Module</th>
+                    <th>Rank</th>
+                    <th>Name</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for session in sessions %}
+                {% for module in modules %}
                 <tr>
-                    <td>{{ session.session_id }}</td>
-                    <td>{{ session.latitude }}</td>
-                    <td>{{ session.longitude }}</td>
-                    <td>{{ session.country }}</td>
-                    <td>{{ session.address }}</td>
+                    <td>{{ module.number }}</td>
+                    <td>{{ module.module }}</td>
+                    <td>{{ module.rank }}</td>
+                    <td>{{ module.name }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -94,20 +92,19 @@
 <script src="/static/js/datatable.js"></script>
 <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 
-<script src=https://unpkg.com/chartkick@4.0.5/dist/chartkick.js></script>
+<script src="https://unpkg.com/chartkick@4.0.5/dist/chartkick.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.js"></script>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
-    new Chartkick.PieChart("thepie", {{ locations | safe }}, {donut: true, download: {background: "#fff"}});
+    new Chartkick.PieChart("thepie", {{ categories | safe }}, {donut: true, download: {background: "#fff"}});
 </script>
 
 <script>
-    new Chartkick.ColumnChart("thecolumn", {{ locations | safe }});
+    new Chartkick.PieChart("thepie2", {{ platforms | safe }}, {donut: false, download: {background: "#fff"}});
 </script>
 
 </body>
 
 {% endblock %}
-
