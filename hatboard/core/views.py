@@ -56,11 +56,12 @@ class Modules(LoginRequiredMixin, View):
 
             if module:
                 api.request('modules', {
-                    'use': module
+                    'action': 'use',
+                    'module': module
                 })
 
                 options = api.request('modules', {
-                    'options': module
+                    'action': 'options'
                 })
 
                 if not options:
@@ -116,9 +117,10 @@ class Exchange(LoginRequiredMixin, View):
 
                     if remote_file and local_path:
                         api.request('sessions', {
-                            'download': remote_file,
-                            'path': local_path,
-                            'id': session
+                            'action': 'download',
+                            'session': session,
+                            'remote_file': remote_file,
+                            'local_path': local_path
                         })
                 else:
                     local_file = request.POST['local_file']
@@ -126,9 +128,10 @@ class Exchange(LoginRequiredMixin, View):
 
                     if local_file and remote_path:
                         api.request('sessions', {
-                            'upload': local_file,
-                            'path': remote_path,
-                            'id': session
+                            'action': 'upload',
+                            'session': session,
+                            'local_file': local_file,
+                            'remote_path': remote_path
                         })
 
         return render(request, self.template, {
@@ -216,15 +219,19 @@ class Control(LoginRequiredMixin, View):
 
             if session:
                 if 'command' not in request.POST:
-                    api.request('sessions', {'close': session})
+                    api.request('sessions', {
+                        'action': 'close',
+                        'session': session
+                    })
                 else:
                     command = request.POST['command']
 
                     if command:
                         output = api.request('sessions', {
+                            'action': 'execute',
+                            'session': session,
                             'command': command,
-                            'output': 'yes',
-                            'id': session
+                            'output': 'yes'
                         }).text
 
                         output = '<pre>' + output.replace('"', '') + '</pre>'
@@ -307,22 +314,27 @@ class Dashboard(LoginRequiredMixin, View):
             command = request.POST['command']
 
             output = api.request('sessions', {
+                'action': 'execute',
+                'session': session,
                 'command': command,
-                'output': 'yes',
-                'id': session
+                'output': 'yes'
             }).text
 
             output = '<pre>' + output.replace('"', '') + '</pre>'
             output = output.replace("\\n", '<br>')
 
-        return HttpResponse(json.dumps({'output': output}))
+        return HttpResponse(json.dumps({
+            'output': output
+        }))
 
     def get(self, request):
         platforms = []
         locations = []
 
         if utils.check_connected():
-            opened_sessions = int(api.request('sessions', {'count': 'all'}).text)
+            opened_sessions = len(api.request('sessions', {
+                'action': 'list'
+            }).json)
         else:
             opened_sessions = 0
 
@@ -330,7 +342,10 @@ class Dashboard(LoginRequiredMixin, View):
 
         for session in sessions:
             platform = session.platform[session.platform.find('; ')+2:]
-            platform = [platform, int(api.request('sessions', {'count': platform.lower()}).text)]
+            platform = [platform, len(api.request('sessions', {
+                'action': 'list',
+                'fetch': platform
+            }).json)]
 
             if platform not in platforms:
                 platforms.append(platform)
@@ -370,11 +385,15 @@ class Login(View):
 
     def post(self, request):
         form = AuthenticationForm(request.POST)
+
         username = request.POST['username']
         password = request.POST['password']
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            api.login(username, password)
             login(request, user)
+
             return HttpResponseRedirect('/')
         else:
             return render(request, self.template, {'form': form})
