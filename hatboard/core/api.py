@@ -29,25 +29,19 @@ import requests
 
 class API:
     hatsploit_host = '127.0.0.1'
+    hatsploit_token = 'A' * 32
     hatsploit_port = str(8008)
 
     api = f"http://{hatsploit_host}:{hatsploit_port}/"
 
     def request(self, action=None, data={}):
-        if data:
-            request = ''
-            for key in data:
-                request += f'{key}={data[key]}&'
-            if action:
-                request = self.api + action + '?' + request[:-1]
-            else:
-                request = self.api + '?' + request[:-1]
-        else:
-            if action:
-                request = self.api + action
-            else:
-                request = self.api
+        data.update({
+            'token': self.hatsploit_token
+        })
+
+        request = self.api + action
+
         try:
-            return requests.get(request)
+            return requests.post(request, data=data)
         except Exception:
             return None
