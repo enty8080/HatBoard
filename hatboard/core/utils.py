@@ -52,7 +52,9 @@ class Utils:
         return False
 
     def get_modules(self):
-        modules = self.api.request('modules', {'list': 'all'})
+        modules = self.api.request('modules', {
+            'action': 'list'
+        })
 
         if not modules:
             modules = dict()
@@ -73,7 +75,9 @@ class Utils:
         return modules
 
     def get_sessions(self, locate=False):
-        sessions = self.api.request('sessions', {'list': 'all'})
+        sessions = self.api.request('sessions', {
+            'action': 'list'
+        })
 
         if not sessions:
             sessions = dict()
