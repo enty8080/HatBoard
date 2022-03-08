@@ -44,8 +44,8 @@ api = API()
 utils = Utils()
 
 
-class Modules(LoginRequiredMixin, View):
-    template = 'modules.html'
+class Attack(LoginRequiredMixin, View):
+    template = 'attack.html'
     login_url = '/login/'
 
     def post(self, request):
@@ -251,30 +251,66 @@ class Control(LoginRequiredMixin, View):
         })
 
 
-class Overview(LoginRequiredMixin, View):
-    template = 'overview.html'
+class Modules(LoginRequiredMixin, View):
+    template = 'modules.html'
     login_url = '/login/'
 
     def get(self, request):
         modules = utils.get_modules()
 
-        module_categories = []
-        payload_categories = []
+        categories = []
+        platforms = []
 
         for module in modules:
-            category = module.module.split('/')[0]
+            category = module.category
             amount = 0
 
             for current_module in modules:
-                if current_module.module.split('/')[0] == category:
+                if current_module.category == category:
                     amount += 1
 
             category = [category.title(), amount]
 
-            if category not in module_categories:
-                module_categories.append(category)
+            if category not in categories:
+                categories.append(category)
 
+            platform = module.platform
+            amount = 0
+
+            for current_module in modules:
+                if current_module.platform == platform:
+                    amount += 1
+
+            if platform in ['apple_ios']:
+                platform = 'Apple iOS'
+            elif platform in ['macos']:
+                platform = 'macOS'
+            else:
+                platform = platform.title()
+
+            platform = [platform, amount]
+
+            if platform not in platforms:
+                platforms.append(platform)
+
+        return render(request, self.template, {
+            'connected': utils.check_connected(),
+            'modules': modules,
+
+            'categories': categories,
+            'platforms': platforms
+        })
+
+
+class Payloads(LoginRequiredMixin, View):
+    template = 'payloads.html'
+    login_url = '/login/'
+
+    def get(self, request):
         payloads = utils.get_payloads()
+
+        categories = []
+        platforms = []
 
         for payload in payloads:
             category = payload.category
@@ -286,15 +322,34 @@ class Overview(LoginRequiredMixin, View):
 
             category = [category.title(), amount]
 
-            if category not in payload_categories:
-                payload_categories.append(category)
+            if category not in categories:
+                categories.append(category)
+
+            platform = payload.platform
+            amount = 0
+
+            for current_payload in payloads:
+                if current_payload.platform == platform:
+                    amount += 1
+
+            if platform in ['apple_ios']:
+                platform = 'Apple iOS'
+            elif platform in ['macos']:
+                platform = 'macOS'
+            else:
+                platform = platform.title()
+
+            platform = [platform, amount]
+
+            if platform not in platforms:
+                platforms.append(platform)
 
         return render(request, self.template, {
             'connected': utils.check_connected(),
-            'modules': modules,
+            'payloads': payloads,
 
-            'module_categories': module_categories,
-            'payload_categories': payload_categories
+            'categories': categories,
+            'platforms': platforms
         })
 
 
