@@ -28,20 +28,40 @@ import requests
 
 
 class API:
-    hatsploit_host = '127.0.0.1'
-    hatsploit_token = 'A' * 32
-    hatsploit_port = str(8008)
+    api_host = '127.0.0.1'
+    api_port = 8008
 
-    api = f"http://{hatsploit_host}:{hatsploit_port}/"
+    api_token = None
+    api_url = f"http://{api_host}:{str(api_port)}/"
+
+    def login(self, username, password):
+        request = self.api_url + 'login'
+        try:
+            response = requests.post(request, data={
+                'username': username,
+                'password': password
+            })
+
+            if response:
+                self.api_token = response.json()['token']
+                return True
+
+        except Exception:
+            pass
+
+        return False
 
     def request(self, action=None, data={}):
-        data.update({
-            'token': self.hatsploit_token
-        })
+        if self.api_token:
+            data.update({
+                'token': self.api_token
+            })
 
-        request = self.api + action
+            request = self.api_url + action
 
-        try:
-            return requests.post(request, data=data)
-        except Exception:
-            return None
+            try:
+                return requests.post(request, data=data)
+            except Exception:
+                pass
+
+        return None
