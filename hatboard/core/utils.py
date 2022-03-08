@@ -66,10 +66,11 @@ class Utils:
             if not Payload.objects.filter(number=number).exists():
                 Payload.objects.create(
                     number=number,
-                    category=payloads[payload]['Category'],
-                    payload=payloads[payload]['Payload'],
-                    rank=payloads[payload]['Rank'],
-                    name=payloads[payload]['Name']
+                    category=payloads[number]['Category'],
+                    payload=payloads[number]['Payload'],
+                    rank=payloads[number]['Rank'],
+                    name=payloads[number]['Name'],
+                    platform=payloads[number]['Platform']
                 )
 
         payloads = Payload.objects.all()
@@ -89,6 +90,7 @@ class Utils:
             if not Module.objects.filter(number=number).exists():
                 Module.objects.create(
                     number=number,
+                    category=modules[number]['Category'],
                     module=modules[number]['Module'],
                     rank=modules[number]['Rank'],
                     name=modules[number]['Name'],
