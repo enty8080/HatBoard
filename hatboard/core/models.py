@@ -58,7 +58,6 @@ class Module(models.Model):
     module = models.CharField(max_length=250)
     rank = models.CharField(max_length=250)
     name = models.CharField(max_length=250)
-    platform = models.CharField(max_length=250)
 
     def __str__(self):
         return self.number
