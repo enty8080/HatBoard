@@ -69,6 +69,7 @@
                 <thead>
                 <tr>
                     <th>Number</th>
+                    <th>Category</th>
                     <th>Module</th>
                     <th>Rank</th>
                     <th>Name</th>
@@ -78,6 +79,7 @@
                 {% for module in modules %}
                 <tr>
                     <td>{{ module.number }}</td>
+                    <td>{{ module.category }}</td>
                     <td>{{ module.module }}</td>
                     <td>{{ module.rank }}</td>
                     <td>{{ module.name }}</td>
