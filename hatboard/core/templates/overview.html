@@ -11,7 +11,7 @@
                 <div class="card-header bg-transparent px-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="me-4">
-                            <h2 class="card-title mb-0">Categories</h2>
+                            <h2 class="card-title mb-0">Modules</h2>
                             <div class="card-subtitle">Modules Categories</div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex h-100 w-100 align-items-center justify-content-center">
                         <div class="w-100">
-                            {% if categories %}
+                            {% if modules_categories %}
                             <div id="thepie"></div>
                             {% else %}
                             <p>No data available to display</p>
@@ -35,15 +35,15 @@
                 <div class="card-header bg-transparent px-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="me-4">
-                            <h2 class="card-title mb-0">Platfoms</h2>
-                            <div class="card-subtitle">Modules Platforms</div>
+                            <h2 class="card-title mb-0">Payloads</h2>
+                            <div class="card-subtitle">Payloads Categories</div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body p-4">
                     <div class="d-flex h-100 w-100 align-items-center justify-content-center">
                         <div class="w-100">
-                            {% if platforms %}
+                            {% if payload_categories %}
                             <div id="thepie2"></div>
                             {% else %}
                             <p>No data available to display</p>
@@ -98,11 +98,11 @@
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script>
-    new Chartkick.PieChart("thepie", {{ categories | safe }}, {donut: true, download: {background: "#fff"}});
+    new Chartkick.PieChart("thepie", {{ modules_categories | safe }}, {donut: true, download: {background: "#fff"}});
 </script>
 
 <script>
-    new Chartkick.PieChart("thepie2", {{ platforms | safe }}, {donut: false, download: {background: "#fff"}});
+    new Chartkick.PieChart("thepie2", {{ payloads_categories | safe }}, {donut: false, download: {background: "#fff"}});
 </script>
 
 </body>
