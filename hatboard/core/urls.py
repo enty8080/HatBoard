@@ -34,8 +34,9 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('', views.Index.as_view(), name='index'),
 
-    path('overview/', views.Overview.as_view(), name='overview'),
     path('modules/', views.Modules.as_view(), name='modules'),
+    path('payloads/', views.Payloads.as_view(), name='payloads'),
+    path('attack/', views.Attack.as_vies(), name='attack'),
 
     path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
     path('map/', views.Map.as_view(), name='map'),
