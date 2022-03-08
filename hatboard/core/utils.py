@@ -30,6 +30,7 @@ import requests
 
 from .api import API
 
+from .payloads import Payloads
 from .models import Module
 from .models import Session
 
@@ -50,6 +51,29 @@ class Utils:
         if self.api.request():
             return True
         return False
+
+    def get_payloads(self):
+        payloads = self.api.request('payloads', {
+            'action': 'list'
+        })
+        
+        if not payloads:
+            payloads = dict()
+        else:
+            payloads = payloads.json()
+            
+        for number in payloads:
+            if not Payload.objects.filter(number=number).exists():
+                Payload.objects.create(
+                    number=number,
+                    category=payloads[payload]['Category'],
+                    payload=payloads[payload]['Payload'],
+                    rank=payloads[payload]['Rank'],
+                    name=payloads[payload]['Name']
+                )
+
+        payloads = Payload.objects.all()
+        return payloads
 
     def get_modules(self):
         modules = self.api.request('modules', {
