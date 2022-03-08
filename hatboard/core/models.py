@@ -42,6 +42,17 @@ class Session(models.Model):
         return self.session_id
 
 
+class Payload(models.Model):
+    number = models.PositiveIntegerField()
+    category = models.CharField(max_length=250)
+    payload = models.CharField(max_length=250)
+    rank = models.CharField(max_length=250)
+    name = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.number
+
+
 class Module(models.Model):
     number = models.PositiveIntegerField()
     module = models.CharField(max_length=250)
