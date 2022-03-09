@@ -77,8 +77,8 @@ After this, navigate to `http://127.0.0.1:7777/` and log in to your account.
 
 ## Synchronizing with HatSploit
 
-Start HatSploit Framework like this and it will automatically connect to HatBoard.
+Start HatSploit Framework and use `api` command.
 
 ```
-hsf --rest-api
+api on 8008 <hatboard_username> <hatboard_password>
 ```
