@@ -28,14 +28,15 @@ import requests
 
 
 class API:
-    api_host = '127.0.0.1'
-    api_port = 8008
+    def __init__(self, host='127.0.0.1', port=8008, token=None):
+        self.host = host
+        self.port = str(port)
 
-    api_token = None
-    api_url = f"http://{api_host}:{str(api_port)}/"
+        self.token = token
+        self.url = f"http://{self.host}:{self.port}/"
 
     def login(self, username, password):
-        request = self.api_url + 'login'
+        request = self.url + 'login'
         try:
             response = requests.post(request, data={
                 'username': username,
@@ -50,13 +51,13 @@ class API:
 
         return None
 
-    def request(self, action=None, data={}):
-        if self.api_token:
+    def request(self, action='', data={}):
+        if self.token:
             data.update({
-                'token': self.api_token
+                'token': self.token
             })
 
-            request = self.api_url + action
+            request = self.url + action
 
             try:
                 return requests.post(request, data=data)
