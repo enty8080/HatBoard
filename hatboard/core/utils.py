@@ -48,7 +48,7 @@ class Utils:
         return time.time() - self.start
 
     def check_connected(self):
-        if self.api.request():
+        if self.api.request('login').status_code == 400:
             return True
         return False
 
