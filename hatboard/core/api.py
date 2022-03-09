@@ -43,13 +43,12 @@ class API:
             })
 
             if response:
-                self.api_token = response.json()['token']
-                return True
+                return response.json()['token']
 
         except Exception:
             pass
 
-        return False
+        return None
 
     def request(self, action=None, data={}):
         if self.api_token:
