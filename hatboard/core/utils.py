@@ -30,7 +30,7 @@ import requests
 
 from .api import API
 
-from .payloads import Payloads
+from .models import Payloads
 from .models import Module
 from .models import Session
 
