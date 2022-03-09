@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('modules/', views.Modules.as_view(), name='modules'),
     path('payloads/', views.Payloads.as_view(), name='payloads'),
-    path('attack/', views.Attack.as_vies(), name='attack'),
+    path('attack/', views.Attack.as_view(), name='attack'),
 
     path('dashboard/', views.Dashboard.as_view(), name='dashboard'),
     path('map/', views.Map.as_view(), name='map'),
