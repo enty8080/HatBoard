@@ -30,7 +30,7 @@ import requests
 
 from .api import API
 
-from .models import Payloads
+from .models import Payload
 from .models import Module
 from .models import Session
 
@@ -56,12 +56,12 @@ class Utils:
         payloads = self.api.request('payloads', {
             'action': 'list'
         })
-        
+
         if not payloads:
             payloads = dict()
         else:
             payloads = payloads.json()
-            
+
         for number in payloads:
             if not Payload.objects.filter(number=number).exists():
                 Payload.objects.create(
