@@ -385,7 +385,7 @@ class Dashboard(LoginRequiredMixin, View):
         if utils.check_connected():
             opened_sessions = len(api.request('sessions', {
                 'action': 'list'
-            }).json)
+            }).json())
         else:
             opened_sessions = 0
 
@@ -396,7 +396,7 @@ class Dashboard(LoginRequiredMixin, View):
             platform = [platform, len(api.request('sessions', {
                 'action': 'list',
                 'fetch': platform
-            }).json)]
+            }).json())]
 
             if platform not in platforms:
                 platforms.append(platform)
