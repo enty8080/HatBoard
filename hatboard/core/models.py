@@ -76,7 +76,7 @@ class Option(models.Model):
         return self.name
 
 
-class Authentication(models.Model):
+class Account(models.Model):
     token = models.CharField(max_length=250)
     host = models.CharField(max_length=250)
     port = models.PositiveIntegerField()
