@@ -26,19 +26,15 @@
 
 import requests
 
-from .models import Token
+from .models import Account
 
 
 class API:
-    def __init__(self, host='127.0.0.1', port=8008):
-        self.host = host
-        self.port = str(port)
+    url = "http://{}:{}/"
 
-        self.tokens = Token.objects.all()
-        self.url = f"http://{self.host}:{self.port}/"
+    def login(self, username, password, host, port):
+        request = self.url.format(host, str(port)) + 'login'
 
-    def login(self, username, password):
-        request = self.url + 'login'
         try:
             response = requests.post(request, data={
                 'username': username,
@@ -48,24 +44,31 @@ class API:
             if response:
                 token = response.json()['token']
 
-                if not Token.objects.filter(token=token).exists():
-                    Token.objects.create(
-                        token=token
+                if not Account.objects.filter(token=token).exists():
+                    Account.objects.create(
+                        token=token,
+                        host=host,
+                        port=int(port)
                     )
 
-                self.tokens = Token.objects.all()
+                return True
 
         except Exception:
             pass
 
+        return False
+
     def request(self, action='', data={}):
-        if self.tokens:
-            for token in self.tokens:
+        accounts = Account.objects.all()
+
+        if accounts:
+            for account in accounts:
                 data.update({
-                    'token': token.token
+                    'token': account.token
                 })
 
-                request = self.url + action
+                request = self.url.format(account.host,
+                                          str(account.port)) + action
 
                 try:
                     response = requests.post(request, data=data)
@@ -74,6 +77,7 @@ class API:
                         continue
 
                     return response
+
                 except Exception:
                     continue
 
