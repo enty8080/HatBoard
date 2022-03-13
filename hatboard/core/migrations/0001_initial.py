@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
             ]
         ),
         migrations.CreateModel(
-            name='Authentication',
+            name='Account',
             fields=[
                 ('token', models.CharField(max_length=250)),
                 ('host', models.CharField(max_length=250)),
