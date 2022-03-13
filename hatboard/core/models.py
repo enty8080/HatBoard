@@ -76,7 +76,7 @@ class Option(models.Model):
         return self.name
 
 
-class API(models.Model):
+class Token(models.Model):
     token = models.CharField(max_length=250)
 
     def __str__(self):
