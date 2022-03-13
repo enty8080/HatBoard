@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
             ]
         ),
         migrations.CreateModel(
-            name='API',
+            name='Token',
             fields=[
                 ('token', models.CharField(max_length=250))
             ]
