@@ -26,6 +26,18 @@
                     </div>
                 </div>
                 <p></p>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.host }}
+                    </div>
+                </div>
+                <p></p>
+                <div class="form-group">
+                    <div class="form-label-group">
+                        {{ form.port }}
+                    </div>
+                </div>
+                <p></p>
                 <button class="btn btn-dark btn-block" type="submit">Login</button>
             </form>
         </div>
@@ -35,14 +47,29 @@
 <script>
     document.getElementById("id_username").classList.add("form-control");
     document.getElementById("id_password").classList.add("form-control");
+
     document.getElementById("id_username").placeholder = "Username";
     document.getElementById("id_password").placeholder = "Password";
+
     document.getElementById("id_username").type = "text";
     document.getElementById("id_password").type = "password";
+
     document.getElementById("id_username").required = "required";
     document.getElementById("id_password").required = "required";
+
     document.getElementById("id_username").autofocus = "autofocus";
 
+    document.getElementById("id_host").classList.add("form-control");
+    document.getElementById("id_port").classList.add("form-control");
+
+    document.getElementById("id_host").placeholder = "Host";
+    document.getElementById("id_port").placeholder = "Port";
+
+    document.getElementById("id_host").type = "text";
+    document.getElementById("id_port").type = "text";
+
+    document.getElementById("id_host").required = "required";
+    document.getElementById("id_port").required = "required";
 </script>
 </body>
 
