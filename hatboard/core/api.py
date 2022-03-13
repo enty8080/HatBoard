@@ -26,13 +26,15 @@
 
 import requests
 
+from .models import Token
+
 
 class API:
-    def __init__(self, host='127.0.0.1', port=8008, token=None):
+    def __init__(self, host='127.0.0.1', port=8008):
         self.host = host
         self.port = str(port)
 
-        self.token = token
+        self.tokens = Token.objects.all()
         self.url = f"http://{self.host}:{self.port}/"
 
     def login(self, username, password):
@@ -44,24 +46,35 @@ class API:
             })
 
             if response:
-                return response.json()['token']
+                token = response.json()['token']
+
+                if not Token.objects.filter(token=token).exists():
+                    Token.objects.create(
+                        token=token
+                    )
+
+                self.tokens = Token.objects.all()
 
         except Exception:
             pass
 
-        return None
-
     def request(self, action='', data={}):
-        if self.token:
-            data.update({
-                'token': self.token
-            })
+        if self.tokens:
+            for token in self.tokens:
+                data.update({
+                    'token': token.token
+                })
 
-            request = self.url + action
+                request = self.url + action
 
-            try:
-                return requests.post(request, data=data)
-            except Exception:
-                pass
+                try:
+                    response = requests.post(request, data=data)
+
+                    if response.status_code == 401:
+                        continue
+
+                    return response
+                except Exception:
+                    continue
 
         return None
