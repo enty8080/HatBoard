@@ -445,9 +445,9 @@ class Login(View):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            api.login(username, password, host, port)
+            if api.login(username, password, host, port):
+                login(request, user)
 
-            login(request, user)
-            return HttpResponseRedirect('/')
-        else:
-            return render(request, self.template, {'form': form})
+                return HttpResponseRedirect('/')
+
+        return render(request, self.template, {'form': form})
