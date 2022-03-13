@@ -439,11 +439,13 @@ class Login(View):
 
         username = request.POST['username']
         password = request.POST['password']
+        host = request.POST['host']
+        port = request.POST['port']
 
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
-            token = api.login(username, password)
-            api.api_token = token
+            api.login(username, password, host, port)
 
             login(request, user)
             return HttpResponseRedirect('/')
