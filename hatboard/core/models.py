@@ -76,8 +76,10 @@ class Option(models.Model):
         return self.name
 
 
-class Token(models.Model):
+class Authentication(models.Model):
     token = models.CharField(max_length=250)
+    host = models.CharField(max_length=250)
+    port = models.PositiveIntegerField()
 
     def __str__(self):
         return self.token
