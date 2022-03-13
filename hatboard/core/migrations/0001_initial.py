@@ -78,5 +78,11 @@ class Migration(migrations.Migration):
                 ('required', models.CharField(max_length=250)),
                 ('description', models.CharField(max_length=250))
             ]
+        ),
+        migrations.CreateModel(
+            name='API',
+            fields=[
+                ('token', models.CharField(max_length=250))
+            ]
         )
     ]
