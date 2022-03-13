@@ -80,9 +80,11 @@ class Migration(migrations.Migration):
             ]
         ),
         migrations.CreateModel(
-            name='Token',
+            name='Authentication',
             fields=[
-                ('token', models.CharField(max_length=250))
+                ('token', models.CharField(max_length=250)),
+                ('host', models.CharField(max_length=250)),
+                ('port', models.PositiveIntegerField())
             ]
         )
     ]
