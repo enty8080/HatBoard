@@ -60,7 +60,7 @@
                 <div class="card-body p-4">
                     <div>
                         <div class="form-floating">
-                            <form action="/modules/" method="post">
+                            <form action="/attack/" method="post">
                                 {% csrf_token %}
                                 <select class="form-select" name="module">
                                     {% for module in modules %}
